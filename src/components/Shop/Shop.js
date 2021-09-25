@@ -16,12 +16,13 @@ const Shop = () => {
                 setDisplayProducts(data)
             })
     }, []);
+
     useEffect(() => {
         if (products.length) {
             const saveCart = getStoredCart();
             const storedCart = [];
             for (const key in saveCart) {
-                const addedProduct = products.find(product => product.key === key);
+                const addedProduct = products.find(product => key === product.key);
                 if (addedProduct) {
                     const quantity = saveCart[key];
                     addedProduct.quantity = quantity;
@@ -32,16 +33,39 @@ const Shop = () => {
         }
     }, [products])
     const handleAddToCart = product => {
-        const newCart = [...cart, product];
-        setCart(newCart);
-        //save to local storage for now
+        // const newCart = [...cart, product];
+        // setCart(newCart);
+        // //save to local storage for now
+        // addToDb(product.key);
+
+        let exist = false;
+        for (const c of cart) {
+            if (c.key === product.key) {
+                exist = true;
+                c.quantity = c.quantity + 1;
+            }
+        }
+        if (!exist) {
+
+            const newCart = [...cart, product];
+            setCart(newCart);
+        }
+        else {
+
+            const newCart = [...cart];
+            setCart(newCart);
+        }
+
+
+        // save to local sotrage
         addToDb(product.key);
     }
+
     const handleSearch = e => {
         const searchText = e.target.value;
         const matchProducts = products.filter(product => product.name.toLowerCase().includes(searchText.toLowerCase()));
         setDisplayProducts(matchProducts)
-        console.log(matchProducts.length)
+
     }
     return (
         <>

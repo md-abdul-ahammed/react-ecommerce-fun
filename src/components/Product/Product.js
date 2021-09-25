@@ -5,7 +5,7 @@ import './Products.css';
 import Rating from 'react-rating';
 
 const Product = (props) => {
-    console.log(props)
+
     const { name, img, seller, stock, price, star } = props.product
     return (
         <div className="product">
